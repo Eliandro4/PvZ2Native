@@ -85,8 +85,10 @@ Añadir una versión nueva = una entrada en `kVersions` de [symbols.cpp](pvz2nat
 
 ## ⚙️ Requisitos
 
-- **Windows de 64 bits** (el ejecutable es x86_64 estático; no hay build de 32 bits — dynarmic solo trae backends para x86_64/arm64/riscv64).
-- **MinGW-w64** (GCC con soporte C++20) y **CMake**.
+- **(64 bits) Windows o Linux** (el ejecutable es x86_64 estático; no hay build de 32 bits — dynarmic solo trae backends para x86_64/arm64/riscv64).
+- **CMake** (3.1+).
+- **Windows:** MinGW-w64 (GCC con soporte C++20).
+- **Linux:** GCC o Clang con soporte C++20.
 - **GPU con OpenGL 2.0** o superior.
 - Tu propia copia de **`libPVZ2.so`** y del **`.obb`** correspondiente, extraídos del juego de Android.
 
@@ -94,8 +96,10 @@ Añadir una versión nueva = una entrada en `kVersions` de [symbols.cpp](pvz2nat
 
 ## 🔨 Compilación
 
-El proyecto se compila con MinGW + CMake. La forma rápida es [compile.bat](compile.bat):
+El proyecto se compila con CMake.
 
+### Windows (MinGW)
+La forma rápida es [compile.bat](compile.bat)
 ```bat
 compile.bat
 ```
@@ -122,6 +126,33 @@ cd build
 make pvz2native      # con el make de MinGW
 ```
 
+### Linux
+La forma rápida es [compile.sh](compile.sh):
+```bash
+./compile.sh
+```
+
+O a mano:
+
+```bash
+mkdir build && cd build
+cmake -DCMAKE_BUILD_TYPE=Release ..
+cmake --build .
+```
+
+El ejecutable queda en:
+
+```text
+build/pvz2native/pvz2native
+```
+
+Recompilación incremental (tras el primer `cmake`):
+
+```bash
+cd build
+make pvz2native
+```
+
 ---
 
 ## ▶️ Ejecución
@@ -130,14 +161,14 @@ make pvz2native      # con el make de MinGW
 
    ```text
    build/pvz2native/
-   ├── pvz2native.exe
+   ├── pvz2native(.exe)
    ├── config.ini            (se genera solo en el primer arranque)
    └── lib/
        ├── libPVZ2.so
        └── main.7.com.ea.game.pvz2_na.obb
    ```
 
-2. Ejecuta `pvz2native.exe`. En el primer arranque escribe un `config.ini` con todas las opciones documentadas y desactivadas.
+2. Ejecuta `pvz2native(.exe)`. En el primer arranque escribe un `config.ini` con todas las opciones documentadas y desactivadas.
 
 Si tus archivos están en otro sitio o quieres probar la 4.5.2, edita `config.ini`:
 
@@ -155,7 +186,7 @@ Fuente única de verdad para rutas y depuración (las antiguas variables `PVZ2_*
 
 | Sección | Clave | Para qué sirve |
 | --- | --- | --- |
-| `[paths]` | `so`, `obb` | Rutas al `.so` y al `.obb` (relativas al `.exe` o absolutas). |
+| `[paths]` | `so`, `obb` | Rutas al `.so` y al `.obb` (relativas al ejecutable o absolutas). |
 | `[log]` | `verbose` | Un banner por cada entrada de `.init_array` y llamada de ciclo de vida. |
 | `[log]` | `trace` | Traza por llamada a import. **Muy ruidoso** (~57 MB de stdout por run). |
 | `[log]` | `pc_sample` | Muestreo de PC / troceo de frames calientes. |
@@ -214,6 +245,7 @@ PvZ2Native/
 ├── dynarmic/              ← JIT ARM (submódulo/dependencia)
 ├── SDL/  glad/  zlib/  stb/  third_party/
 ├── compile.bat           ← build con MinGW
+├── compile.sh            ← build en Linux
 ├── CMakeLists.txt
 └── README.md
 ```

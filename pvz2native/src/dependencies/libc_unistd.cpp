@@ -29,6 +29,8 @@
 #if defined(_WIN32)
 #include <direct.h>
 #include <io.h>
+#else
+#include <unistd.h>
 #endif
 
 namespace pvz2native {
