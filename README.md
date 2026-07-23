@@ -77,7 +77,7 @@ The version is detected by a **byte fingerprint** at two known native functions;
 | Version | APK / OBB | Status |
 | --- | --- | --- |
 | **1.6.10** (2013) | `main.7.com.ea.game.pvz2_na.obb` | 🟢 Boots to the menu |
-| **4.5.2** (2016) | `main.147.com.ea.game.pvz2_row.obb` | 🟡 Boots; loading gate under investigation |
+| **4.5.2** (2016) | `main.147.com.ea.game.pvz2_row.obb` | 🟢 Boots to the menu |
 
 Adding a new version = one entry in `kVersions` in [symbols.cpp](pvz2native/src/game/symbols.cpp). Nothing in `runtime/` or `engine/` changes between versions.
 

@@ -77,7 +77,7 @@ Se detecta la versión por **huella de bytes** en dos funciones nativas conocida
 | Versión | APK / OBB | Estado |
 | --- | --- | --- |
 | **1.6.10** (2013) | `main.7.com.ea.game.pvz2_na.obb` | 🟢 Arranca al menú |
-| **4.5.2** (2016) | `main.147.com.ea.game.pvz2_row.obb` | 🟡 Arranca; gate de carga en investigación |
+| **4.5.2** (2016) | `main.147.com.ea.game.pvz2_row.obb` | 🟢 Arranca al menú |
 
 Añadir una versión nueva = una entrada en `kVersions` de [symbols.cpp](pvz2native/src/game/symbols.cpp). Nada de `runtime/` ni `engine/` cambia entre versiones.
 
