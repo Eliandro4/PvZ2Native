@@ -85,8 +85,10 @@ Adding a new version = one entry in `kVersions` in [symbols.cpp](pvz2native/src/
 
 ## ⚙️ Requirements
 
-- **64-bit Windows** (the executable is static x86_64; there is no 32-bit build — dynarmic only ships backends for x86_64/arm64/riscv64).
-- **MinGW-w64** (GCC with C++20 support) and **CMake**.
+- **(64-bit) Windows or Linux** (the executable is static x86_64; there is no 32-bit build — dynarmic only ships backends for x86_64/arm64/riscv64).
+- **CMake** (3.1+).
+- **Windows:** MinGW-w64 (GCC with C++20 support).
+- **Linux:** GCC or Clang with C++20 support.
 - A **GPU with OpenGL 2.0** or higher.
 - Your own copy of **`libPVZ2.so`** and the matching **`.obb`**, extracted from the Android game.
 
@@ -94,8 +96,9 @@ Adding a new version = one entry in `kVersions` in [symbols.cpp](pvz2native/src/
 
 ## 🔨 Building
 
-The project builds with MinGW + CMake. The quick way is [compile.bat](compile.bat):
-
+The project builds with CMake.
+### Windows (MinGW)
+The quick way is [compile.bat](compile.bat):
 ```bat
 compile.bat
 ```
@@ -122,6 +125,33 @@ cd build
 make pvz2native      # with the MinGW make
 ```
 
+### Linux
+The quick way is [compile.sh](compile.sh):
+```bash
+./compile.sh
+```
+
+Or by hand:
+
+```bash
+mkdir build && cd build
+cmake -DCMAKE_BUILD_TYPE=Release ..
+cmake --build .
+```
+
+The executable ends up at:
+
+```text
+build/pvz2native/pvz2native
+```
+
+Incremental rebuild (after the first `cmake`):
+
+```bash
+cd build
+make pvz2native
+```
+
 ---
 
 ## ▶️ Running
@@ -130,14 +160,14 @@ make pvz2native      # with the MinGW make
 
    ```text
    build/pvz2native/
-   ├── pvz2native.exe
+   ├── pvz2native(.exe)
    ├── config.ini            (generated automatically on first launch)
    └── lib/
        ├── libPVZ2.so
        └── main.7.com.ea.game.pvz2_na.obb
    ```
 
-2. Run `pvz2native.exe`. On the first launch it writes a `config.ini` with every option documented and turned off.
+2. Run `pvz2native(.exe)`. On the first launch it writes a `config.ini` with every option documented and turned off.
 
 If your files live elsewhere or you want to try 4.5.2, edit `config.ini`:
 
@@ -155,7 +185,7 @@ Single source of truth for paths and debugging (the old `PVZ2_*` environment var
 
 | Section | Key | What it does |
 | --- | --- | --- |
-| `[paths]` | `so`, `obb` | Paths to the `.so` and `.obb` (relative to the `.exe`, or absolute). |
+| `[paths]` | `so`, `obb` | Paths to the `.so` and `.obb` (relative to the executable, or absolute). |
 | `[log]` | `verbose` | One banner per `.init_array` entry and lifecycle call. |
 | `[log]` | `trace` | Per-import-call trace. **Very loud** (~57 MB of stdout per run). |
 | `[log]` | `pc_sample` | PC sampling / hot-frame slicing. |
@@ -214,6 +244,7 @@ PvZ2Native/
 ├── dynarmic/              ← ARM JIT (submodule/dependency)
 ├── SDL/  glad/  zlib/  stb/  third_party/
 ├── compile.bat           ← MinGW build
+├── compile.sh            ← Linux build
 ├── CMakeLists.txt
 └── README.md
 ```
